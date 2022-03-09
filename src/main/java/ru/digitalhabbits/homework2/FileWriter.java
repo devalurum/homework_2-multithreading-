@@ -28,6 +28,7 @@ public class FileWriter implements Runnable {
 
     private Path createFile(String outputFile) {
         Path path = Path.of(outputFile);
+
         if (Files.notExists(path)) {
             try {
                 return Files.createFile(path);
