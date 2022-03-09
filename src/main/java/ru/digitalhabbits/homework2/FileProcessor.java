@@ -60,14 +60,15 @@ public class FileProcessor {
                     exchanger.exchange(pairFuture.get());
                 }
             }
-
-        } catch (IOException | InterruptedException | ExecutionException exception) {
-            logger.error("", exception);
+        } catch (IOException exception) {
+            logger.error("Error while reading from file.", exception);
+        } catch (InterruptedException | ExecutionException exception) {
+            logger.error("Error processing line.", exception);
         }
 
         // остановливаем поток writer
-        executorService.shutdown();
         executorServiceForWriter.shutdownNow();
+        executorService.shutdown();
 
         logger.info("Finish main thread {}", Thread.currentThread().getName());
     }
