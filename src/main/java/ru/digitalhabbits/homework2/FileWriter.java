@@ -28,14 +28,14 @@ public class FileWriter implements Runnable {
 
     private Path createFile(String outputFile) {
         Path path = Path.of(outputFile);
-        try {
-            if (Files.notExists(path)) {
+        if (Files.notExists(path)) {
+            try {
                 return Files.createFile(path);
-            } else return path;
-        } catch (IOException e) {
-            logger.error("", e);
-            return path;
+            } catch (IOException e) {
+                logger.error("Error creating file.", e);
+            }
         }
+        return path;
     }
 
     @Override
@@ -45,8 +45,11 @@ public class FileWriter implements Runnable {
             try {
                 Pair<String, Integer> pair = exchanger.exchange(null);
                 writeLine(pair);
-            } catch (IOException | InterruptedException e) {
-                logger.error("", e);
+            } catch (IOException e) {
+                logger.error("Error writing to file.", e);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                logger.error("Error while getting data from threads.", e);
             }
         }
         logger.info("Finish writer thread {}", currentThread().getName());
