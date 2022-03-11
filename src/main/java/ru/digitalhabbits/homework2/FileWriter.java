@@ -33,7 +33,7 @@ public class FileWriter implements Runnable {
             try {
                 return Files.createFile(path);
             } catch (IOException e) {
-                logger.error("Error creating file.", e);
+                throw new RuntimeException("Error creating file.", e);
             }
         }
         return path;
